@@ -4,7 +4,6 @@
 }
 
 .App {
-  background-color: #ebf0f5;
   width: 100vw;
   height: 100vh;
   text-align: center;
@@ -40,16 +39,12 @@
   margin-bottom: 10px;
 }
 
-.appHeader, .appSubHeader {
-  color: var(--font-color);
-}
-
 .appHeader {
   font-size: 24px;
 }
 
 .taskStatusSection {
-  background-color: #ffffff;
+  background-color: #ebf0f5;
   min-width: 200px;
   width: 22vw;
   min-height: 70vh;
@@ -61,7 +56,7 @@
 .SingleTaskCard {
   display: grid;
   grid-template-rows: auto 50px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   border-radius: 6px;
   box-shadow: grey 0 0 8px;
   width: 90%;
@@ -78,12 +73,33 @@
   margin-left: 3px;
 }
 
-.moveTaskButton--right, .deleteButton {
+.moveTaskButton--right {
   grid-row: 2;
-  grid-column: 2;
+  grid-column: 5;
   align-self: end;
   justify-self: end;
   margin-right: 3px;
+}
+
+.moveTaskButton--up {
+  grid-row: 2;
+  grid-column: 2;
+  align-self: end;
+  /*margin-bottom: 2px;*/
+}
+
+.moveTaskButton--down {
+  grid-row: 2;
+  grid-column: 4;
+  align-self: end;
+  /*margin-bottom: 2px;*/
+}
+
+.deleteButton {
+  grid-row: 2;
+  grid-column: 3;
+  align-self: end;
+  margin-bottom: 3px;
 }
 
 .boardBody {

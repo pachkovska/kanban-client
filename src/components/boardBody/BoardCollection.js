@@ -1,15 +1,7 @@
 import React from 'react';
 import SingleBoard from "./SingleBoard";
 
-function BoardCollection ({tasks}) {
-
-    // const  onMoveRightButtonClick  = (sectionTitle, taskIndex) => {
-    //     props.handleTaskMoveToRight(sectionTitle, taskIndex);
-    // }
-    //
-    // const  onMoveLeftButtonClick  = (sectionTitle, taskIndex) => {
-    //     props.handleTaskMoveToLeft(sectionTitle, taskIndex);
-    // }
+function BoardCollection ({tasks, handleHorizontalTaskMove, handleVerticalTaskMove, handleTaskDelete}) {
 
     return (
         <div className={"boardBody"}>
@@ -17,6 +9,9 @@ function BoardCollection ({tasks}) {
                 tasks.map(board => (
                     <SingleBoard
                         board={board}
+                        handleHorizontalTaskMove={(args) => handleHorizontalTaskMove(args)}
+                        handleVerticalTaskMove={(args) => handleVerticalTaskMove(args)}
+                        handleTaskDelete={(args) => handleTaskDelete(args)}
                     />
                 ))
             }

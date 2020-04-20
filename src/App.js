@@ -63,94 +63,95 @@ const tasksInitial = [
 
 function App() {
 
-    // const [tasks, setTasks] = useState([
-    //     {sectionTitle: "TODO", sectionTasks: []},
-    //     {sectionTitle: "IN PROGRESS", sectionTasks: []},
-    //     {sectionTitle: "IN REVIEW", sectionTasks: []},
-    //     {sectionTitle: "DONE", sectionTasks: []},
-    // ]);
-    //
-    // const handleAddTask = (newTask) => {
-    //     const updateTasks = tasks
-    //         updateTasks.splice(0, 1, {
-    //         sectionTitle: "TODO", sectionTasks: [...tasks[0].sectionTasks, newTask]})
-    //     console.log(updateTasks);
-    //     setTasks([...updateTasks]);
-    // }
-
     const [tasks, setTasks] = useState(tasksInitial);
 
     const handleAddTask = (newTask) => {
-        const updateTodoTasks = tasks.find(board => board.boardName === 'todo');
+        const updatedTodoTasks = tasks.find(board => board.boardName === 'todo');
         const todoTasksIndex = tasks.findIndex(board => board.boardName === 'todo');
-        updateTodoTasks.boardTasks.push({id: uuidv4(), ...newTask});
-        setTasks([...tasks.splice(todoTasksIndex, 1, {...updateTodoTasks})]);
+
+        updatedTodoTasks.boardTasks.push({id: uuidv4(), ...newTask});
+
+        const newTaskList = [...tasks];
+        newTaskList.splice(todoTasksIndex, 1, {...updatedTodoTasks});
+
+        setTasks(newTaskList);
     }
 
-    // const [toDoTasks, setToDoTasks] = useState([{taskTitle: 'Task 1', taskBody: 'Fix drag and drop'}]);
-    // const [inProgressTasks, setInProgressTasks] = useState([{taskTitle: 'Task 2', taskBody: 'Fix drop bug'}]);
-    // const [inReviewTasks, setInReviewTasks] = useState([{taskTitle: 'Task 3', taskBody: 'Add drag event handlers'}]);
-    // const [doneTasks, setDoneTasks] = useState([{taskTitle: 'Task 4', taskBody: 'Test'}]);
-    //
-    // const handleAddTask = (task) => {
-    //     setToDoTasks([...toDoTasks, task]);
-    // }
+    const handleTaskDelete = (args) => {
+        const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
 
-    // const handleTaskMove = (moveFrom, moveFromSetter, moveTo, moveToSetter, taskIndex) => {
-    //     const taskToMove = moveFrom[taskIndex];
-    //     const updateCurrentSection = moveFrom;
-    //     updateCurrentSection.splice(taskIndex, 1);
-    //     moveFromSetter([...updateCurrentSection]);
-    //     moveToSetter([...moveTo, taskToMove]);
-    // }
-    //
-    // const handleTaskMoveToRight = (sectionTitle, taskIndex) => {
-    //     if(sectionTitle === 'todo') handleTaskMove(toDoTasks, setToDoTasks, inProgressTasks, setInProgressTasks, taskIndex);
-    //     if(sectionTitle === 'progress') handleTaskMove(inProgressTasks, setInProgressTasks, inReviewTasks, setInReviewTasks, taskIndex);
-    //     if(sectionTitle === 'review') handleTaskMove(inReviewTasks, setInReviewTasks, doneTasks, setDoneTasks, taskIndex);
-    // }
-    //
-    // const handleTaskMoveToLeft = (sectionTitle, taskIndex) => {
-    //     if(sectionTitle === 'progress') handleTaskMove(inProgressTasks, setInProgressTasks, toDoTasks, setToDoTasks, taskIndex);
-    //     if(sectionTitle === 'review') handleTaskMove(inReviewTasks, setInReviewTasks, inProgressTasks, setInProgressTasks, taskIndex);
-    //     if(sectionTitle === 'done') handleTaskMove(doneTasks, setDoneTasks, inReviewTasks, setInReviewTasks, taskIndex);
-    // }
+        const updatedTasks = [...tasks];
+        updatedTasks[boardIndex].boardTasks = updatedTasks[boardIndex].boardTasks.filter(el => el.id !== args.taskId);
 
-    // const handleTaskDelete = (taskIndex) => {
-    //     const updatedDoneTasks = doneTasks;
-    //     updatedDoneTasks.splice(taskIndex, 1)
-    //     setDoneTasks([...updatedDoneTasks]);
-    // }
-    //
-    // const handleDragNDrop = (sectionTitle, task) => {
-    //     console.log(sectionTitle);
-    //     console.log(task)
-    //     if(sectionTitle === 'todo') setToDoTasks([...toDoTasks, task]);
-    //     if(sectionTitle === 'progress') setInProgressTasks([...inProgressTasks, task]);
-    //     if(sectionTitle === 'review') setInReviewTasks([...inReviewTasks, task]);
-    //     if(sectionTitle === 'done') setDoneTasks([...doneTasks, task]);
-    // }
+        setTasks(updatedTasks);
+    }
+
+    const handleHorizontalTaskMove = (args) => {
+        const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
+
+        if (args.direction === 'left' && boardIndex <= 0) return;
+        if ((args.direction === 'right' && boardIndex === tasks.length - 1)  || boardIndex < 0) return;
+
+        const updatedTasks = [...tasks];
+        const taskToMove = updatedTasks[boardIndex].boardTasks.find(el => el.id === args.taskId);
+
+        updatedTasks[boardIndex].boardTasks = updatedTasks[boardIndex].boardTasks.filter(el => el.id !== args.taskId);
+
+        if (args.direction === 'left') updatedTasks[boardIndex - 1].boardTasks.push(taskToMove);
+        if (args.direction === 'right') updatedTasks[boardIndex + 1].boardTasks.push(taskToMove);
+
+        setTasks(updatedTasks);
+    }
+
+    const handleVerticalTaskMove = (args) => {
+        console.log(args);
+        const rearranged = tasks.map(board => {
+            if (board.boardName === args.boardName) {
+                const boardTasks = args.direction === 'up'
+                ? swapUp(board.boardTasks, args.taskId)
+                    : swapDown(board.boardTasks, args.taskId);
+
+                return {...board, boardTasks};
+            }   else return board;
+        });
+        setTasks(rearranged);
+    }
+
+    function swapUp(arr_, id) {
+        const arr = [...arr_];
+        let si = arr.findIndex(el => el.id === id);
+        if (si <= 0) return arr;
+        const prev = arr[si - 1];
+        const curr = arr[si];
+        arr[si] = prev;
+        arr[si - 1] = curr;
+        return arr;
+    }
+
+    function swapDown(arr_, id) {
+        const arr = [...arr_];
+        let si = arr.findIndex(el => el.id === id);
+        if (si >= arr.length - 1) return arr;
+        const prev = arr[si + 1];
+        const curr = arr[si];
+        arr[si] = prev;
+        arr[si + 1] = curr;
+        return arr;
+    }
 
   return (
     <div className="App">
         <div className={"appHeader"}>Kanban Style Task Board</div>
         <div className={"appSubHeader"}>Concentrate on task completion instead of remembering what they are, we'll do this part for you</div>
         <NewTaskForm
-            handleAddTask={(task) => {handleAddTask(task)}}
+            handleAddTask={(task) => handleAddTask(task)}
         />
         <BoardCollection
             tasks={tasks}
-            handleTaskMove={(args) => handleTaskMove(args)}
-            // toDoTasks={toDoTasks}
-            // inProgressTasks={inProgressTasks}
-            // inReviewTasks={inReviewTasks}
-            // doneTasks={doneTasks}
-            // handleTaskMoveToRight={((sectionTitle, taskIndex) => handleTaskMoveToRight(sectionTitle, taskIndex))}
-            // handleTaskMoveToLeft={((sectionTitle, taskIndex) => handleTaskMoveToLeft(sectionTitle, taskIndex))}
-            // onDeleteButtonClick={(taskIndex) => handleTaskDelete(taskIndex)}
-            // handleDragNDrop={(sectionTitle, task) => handleDragNDrop(sectionTitle, task)}
+            handleHorizontalTaskMove={(args) => handleHorizontalTaskMove(args)}
+            handleVerticalTaskMove={(args) => handleVerticalTaskMove(args)}
+            handleTaskDelete={(args) => handleTaskDelete(args)}
         />
-
     </div>
   );
 }
