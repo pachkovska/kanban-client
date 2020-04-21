@@ -93,6 +93,17 @@ function App() {
         setTasks(updatedTasks);
     }
 
+    const handleEditTask = (args) => {
+        console.log(args);
+        const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
+
+      const updatedTasks = [...tasks];
+      const taskIndex = updatedTasks[boardIndex].boardTasks.findIndex(el => el.id == args.taskId);
+      updatedTasks[boardIndex].boardTasks = updatedTasks[boardIndex].boardTasks.splice(taskIndex, 1, args.task);
+
+      setTasks(updatedTasks);
+    }
+
     const handleHorizontalTaskMove = (args) => {
         const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
 
@@ -161,6 +172,7 @@ function App() {
             handleHorizontalTaskMove={(args) => handleHorizontalTaskMove(args)}
             handleVerticalTaskMove={(args) => handleVerticalTaskMove(args)}
             handleTaskDelete={(args) => handleTaskDelete(args)}
+            handleEditTask={(args) => handleEditTask(args)}
         />
     </div>
   );

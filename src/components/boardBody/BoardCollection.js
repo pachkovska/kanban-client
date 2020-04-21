@@ -1,7 +1,7 @@
 import React from 'react';
 import SingleBoard from "./SingleBoard";
 
-function BoardCollection ({tasks, handleHorizontalTaskMove, handleVerticalTaskMove, handleTaskDelete}) {
+function BoardCollection ({tasks, handleHorizontalTaskMove, handleVerticalTaskMove, handleTaskDelete, handleEditTask}) {
 
     return (
         <div className={"boardBody"}>
@@ -12,6 +12,7 @@ function BoardCollection ({tasks, handleHorizontalTaskMove, handleVerticalTaskMo
                         handleHorizontalTaskMove={(args) => handleHorizontalTaskMove(args)}
                         handleVerticalTaskMove={(args) => handleVerticalTaskMove(args)}
                         handleTaskDelete={(args) => handleTaskDelete(args)}
+                        handleEditTask={(args) => handleEditTask(args)}
                     />
                 ))
             }
