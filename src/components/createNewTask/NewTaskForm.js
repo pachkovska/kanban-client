@@ -26,7 +26,7 @@ function NewTaskForm (props) {
 
     return (
         <div>
-            <div className={"createNewTaskButton"} onClick={toggleModal}><i className="fa fa-plus fa-lg createTaskIcon"></i>Create Task</div>
+            <div className={"createNewTaskButton"} onClick={toggleModal}><i className="fa fa-plus fa-lg create-icon"></i>Create Task</div>
             <Modal isOpen={createTaskModal} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }}
                    toggle={toggleModal} className={className}>
                 <ModalHeader toggle={toggleModal}>Create New Task</ModalHeader>

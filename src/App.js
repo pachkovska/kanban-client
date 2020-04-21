@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import NewTaskForm from "./components/createNewTask/NewTaskForm";
+import NewBoardForm from "./components/boardBody/NewBoardForm";
 import BoardCollection from "./components/boardBody/BoardCollection";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -64,6 +65,12 @@ const tasksInitial = [
 function App() {
 
     const [tasks, setTasks] = useState(tasksInitial);
+
+    const handleAddBoard = (board) => {
+      const updatedBoardList = [...tasks];
+      updatedBoardList.push({...board, color: 'primary', boardTasks: []});
+      setTasks(updatedBoardList);
+    }
 
     const handleAddTask = (newTask) => {
         const updatedTodoTasks = tasks.find(board => board.boardName === 'todo');
@@ -145,6 +152,9 @@ function App() {
         <div className={"appSubHeader"}>Concentrate on task completion instead of remembering what they are, we'll do this part for you</div>
         <NewTaskForm
             handleAddTask={(task) => handleAddTask(task)}
+        />
+        <NewBoardForm
+            handleAddBoard={(board) => handleAddBoard(board)}
         />
         <BoardCollection
             tasks={tasks}

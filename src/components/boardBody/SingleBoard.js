@@ -1,12 +1,14 @@
 import React from 'react';
 import SingleTaskCard from "./SingleTaskCard";
+import 'bootstrap/dist/css/bootstrap-grid.min.css';
+
 
 function SingleBoard ({board, handleHorizontalTaskMove, handleVerticalTaskMove, handleTaskDelete}) {
 
     return (
         <div className={"taskStatusSection"}>
-            <div className={"taskStatusSection-title"}>{board.boardName}</div>
-            <div className="titleLine"></div>
+            <div className={"taskStatusSection-title"}>{board.boardName.toUpperCase()}</div>
+            <div className={`titleLine bg-${board.color}`}></div>
             {
                 board.boardTasks.map(task => (
                     <SingleTaskCard
