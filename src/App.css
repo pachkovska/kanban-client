@@ -9,29 +9,29 @@
   text-align: center;
 }
 
-.moveTaskButton, .deleteButton {
-  color: var(--main-btn-color);
+.moveTaskButton--color {
+  color: #428bca;
 }
 
-.createNewTaskButton {
+.createNewTaskButton, .createNewBoardButton {
   background-color: var(--main-btn-color);
   color: #ebf0f5;
   height: 40px;
-  width: 180px;
+  width: 250px;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-left: 30px;
+  margin-left: 20px;
   margin-top: 20px;
 }
 
-.createTaskIcon {
+.create-icon {
   margin: 0 10px 0 0;
 }
 
-.addTaskButton-modal {
+.addTaskButton-modal, .addBoardButton-modal {
   background-color: var(--main-btn-color) !important;
 }
 
@@ -40,11 +40,11 @@
 }
 
 .appHeader {
-  font-size: 24px;
+  font-size: 36px;
 }
 
 .taskStatusSection {
-  background-color: #ebf0f5;
+  background-color: #f5f5f5;
   min-width: 200px;
   width: 22vw;
   min-height: 70vh;
@@ -100,22 +100,35 @@
   grid-column: 3;
   align-self: end;
   margin-bottom: 3px;
+  color: darkred;
 }
 
 .boardBody {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  flex-wrap: wrap;
   flex-direction: row;
-  margin-top: 10px;
+  margin: 10px;
 }
 
 .titleLine {
   width: 96%;
-  background-color: #ebf0f5;
-  height: 1px;
+  height: 3px;
+  display: block;
   margin-bottom: 5px;
 }
 
 .taskStatusSection-title {
   margin: 10px 0 10px 0;
+}
+
+.taskStatusSection {
+  margin: 10px;
+  min-width: 250px;
+}
+
+@media screen and (max-width: 600px) {
+  .boardBody {
+    justify-content: flex-start;
+  }
 }
