@@ -26,7 +26,7 @@ function NewBoardForm (props) {
 
     return (
         <div>
-            <div className={"createNewBoardButton"} onClick={toggleModal}><i className="fa fa-plus fa-lg create-icon"></i>Create Column</div>
+            <div className={"createNewBoardButton"} onClick={toggleModal}><i className="fa fa-plus fa-lg create-icon"></i>Create Workflow Column</div>
             <Modal isOpen={createBoardModal} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }}
                    toggle={toggleModal} className={className}>
                 <ModalHeader toggle={toggleModal}>Create New Workflow Column</ModalHeader>

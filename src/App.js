@@ -3,7 +3,7 @@ import './App.css';
 import NewTaskForm from "./components/createNewTask/NewTaskForm";
 import NewBoardForm from "./components/boardBody/NewBoardForm";
 import BoardCollection from "./components/boardBody/BoardCollection";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 const tasksInitial = [
     {
@@ -67,9 +67,9 @@ function App() {
     const [tasks, setTasks] = useState(tasksInitial);
 
     const handleAddBoard = (board) => {
-      const updatedBoardList = [...tasks];
-      updatedBoardList.push({...board, color: 'primary', boardTasks: []});
-      setTasks(updatedBoardList);
+        const updatedBoardList = [...tasks];
+        updatedBoardList.push({...board, color: 'primary', boardTasks: []});
+        setTasks(updatedBoardList);
     }
 
     const handleAddTask = (newTask) => {
@@ -93,11 +93,22 @@ function App() {
         setTasks(updatedTasks);
     }
 
+    const handleEditTask = (args) => {
+        const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
+        const updatedTasks = [...tasks];
+        updatedTasks[boardIndex].boardTasks.map(task => console.log(task.id));
+        const taskIndex = updatedTasks[boardIndex].boardTasks.findIndex( task => task.id === args.editTask.id);
+        updatedTasks[boardIndex].boardTasks[taskIndex] = args.editTask;
+        console.log(updatedTasks[boardIndex].boardTasks.filter(task => task.id === args.editTask.id));
+
+        setTasks(updatedTasks);
+    }
+
     const handleHorizontalTaskMove = (args) => {
         const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
 
         if (args.direction === 'left' && boardIndex <= 0) return;
-        if ((args.direction === 'right' && boardIndex === tasks.length - 1)  || boardIndex < 0) return;
+        if ((args.direction === 'right' && boardIndex === tasks.length - 1) || boardIndex < 0) return;
 
         const updatedTasks = [...tasks];
         const taskToMove = updatedTasks[boardIndex].boardTasks.find(el => el.id === args.taskId);
@@ -115,11 +126,11 @@ function App() {
         const rearranged = tasks.map(board => {
             if (board.boardName === args.boardName) {
                 const boardTasks = args.direction === 'up'
-                ? swapUp(board.boardTasks, args.taskId)
+                    ? swapUp(board.boardTasks, args.taskId)
                     : swapDown(board.boardTasks, args.taskId);
 
                 return {...board, boardTasks};
-            }   else return board;
+            } else return board;
         });
         setTasks(rearranged);
     }
@@ -146,24 +157,27 @@ function App() {
         return arr;
     }
 
-  return (
-    <div className="App">
-        <div className={"appHeader"}>Kanban Style Task Board</div>
-        <div className={"appSubHeader"}>Concentrate on task completion instead of remembering what they are, we'll do this part for you</div>
-        <NewTaskForm
-            handleAddTask={(task) => handleAddTask(task)}
-        />
-        <NewBoardForm
-            handleAddBoard={(board) => handleAddBoard(board)}
-        />
-        <BoardCollection
-            tasks={tasks}
-            handleHorizontalTaskMove={(args) => handleHorizontalTaskMove(args)}
-            handleVerticalTaskMove={(args) => handleVerticalTaskMove(args)}
-            handleTaskDelete={(args) => handleTaskDelete(args)}
-        />
-    </div>
-  );
+    return (
+        <div className="App">
+            <div className={"appHeader"}>Kanban Style Task Board</div>
+            <div className={"appSubHeader"}>Concentrate on task completion instead of remembering what they are, we'll
+                do this part for you
+            </div>
+            <NewTaskForm
+                handleAddTask={(task) => handleAddTask(task)}
+            />
+            <NewBoardForm
+                handleAddBoard={(board) => handleAddBoard(board)}
+            />
+            <BoardCollection
+                tasks={tasks}
+                handleHorizontalTaskMove={(args) => handleHorizontalTaskMove(args)}
+                handleVerticalTaskMove={(args) => handleVerticalTaskMove(args)}
+                handleTaskDelete={(args) => handleTaskDelete(args)}
+                handleEditTask={(args) => handleEditTask(args)}
+            />
+        </div>
+    );
 }
 
 export default App;
