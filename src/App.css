@@ -127,6 +127,17 @@
   min-width: 250px;
 }
 
+.taskTitle {
+  margin: 5px;
+  grid-row: 1;
+  grid-column: 1 / span 4;
+}
+
+.editTask {
+  grid-row: 1;
+  grid-column: 5;
+}
+
 @media screen and (max-width: 600px) {
   .boardBody {
     justify-content: flex-start;

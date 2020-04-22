@@ -22,14 +22,14 @@ function EditTaskForm ({className, task, handleEditTask}) {
     }
 
     return (
-        <div>
+        <div className={"editTask"}>
             <div className={"editTaskButton"} onClick={toggleModal}><i className="fa fa-edit fa-lg"></i></div>
             <Modal isOpen={editTaskModal} modalTransition={{ timeout: 700 }} backdropTransition={{ timeout: 1300 }}
                    toggle={toggleModal} className={className}>
                 <ModalHeader toggle={toggleModal}>Edit Current Task</ModalHeader>
                 <ModalBody>
-                    <Input className={"taskTitleInput"} value={editTask.taskTitle || task.taskTitle} type="text" name={"taskTitle"} onChange={onTaskChange} />
-                    <Input type="textarea" value={editTask.taskBody || task.taskBody} name={"taskBody"} onChange={onTaskChange} rows={5} />
+                    <Input className={"taskTitleInput"} value={editTask.taskTitle || '' || task.taskTitle} type="text" name={"taskTitle"} onChange={onTaskChange} />
+                    <Input type="textarea" value={editTask.taskBody || '' || task.taskBody} name={"taskBody"} onChange={onTaskChange} rows={5} />
                 </ModalBody>
                 <ModalFooter>
                     <Button className={"addTaskButton-modal"} onClick={onEditTaskButtonClick}>Save Task</Button>
