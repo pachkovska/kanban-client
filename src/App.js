@@ -3,7 +3,6 @@ import './App.css';
 import NewTaskForm from "./components/createNewTask/NewTaskForm";
 import NewBoardForm from "./components/boardBody/NewBoardForm";
 import BoardCollection from "./components/boardBody/BoardCollection";
-import {v4 as uuidv4} from 'uuid';
 import axios from 'axios';
 
 const tasksInitial = [
@@ -42,9 +41,12 @@ function App() {
                 const dbTasks = response.data.tasks;
                 console.log(dbTasks);
                 const tasksToDisplay = [...tasks];
-                tasksToDisplay.map(board => dbTasks.map(task =>
-                    board.boardName === task.status && board.boardTasks.push(task)
-                ));
+                tasksToDisplay.map(board => {
+                    let singleBoardTasks = dbTasks.filter(task => task.status === board.boardName);
+                    console.log(singleBoardTasks);
+                    board.boardTasks = singleBoardTasks;
+                    }
+                );
                 setTasks(tasksToDisplay);
             })
             .catch(function (error) {
