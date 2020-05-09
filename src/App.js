@@ -1,70 +1,60 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import NewTaskForm from "./components/createNewTask/NewTaskForm";
 import NewBoardForm from "./components/boardBody/NewBoardForm";
 import BoardCollection from "./components/boardBody/BoardCollection";
 import {v4 as uuidv4} from 'uuid';
+import axios from 'axios';
 
 const tasksInitial = [
     {
         boardName: 'todo',
         color: 'secondary',
-        boardTasks: [
-            {
-                id: uuidv4(),
-                taskTitle: 'todo 1',
-                taskBody: 'do stuff'
-            },
-            {
-                id: uuidv4(),
-                taskTitle: 'todo 12',
-                taskBody: 'do stuff'
-            },
-            {
-                id: uuidv4(),
-                taskTitle: 'todo 2',
-                taskBody: 'Fix drag and drop'
-            }
-        ],
+        boardTasks: [],
     },
     {
         boardName: 'progress',
         color: 'primary',
-        boardTasks: [
-            {
-                id: uuidv4(),
-                taskTitle: 'todo 3',
-                taskBody: 'Add drag event handlers'
-            }
-        ],
+        boardTasks: [],
     },
     {
         boardName: 'review',
         color: 'warning',
-        boardTasks: [
-            {
-                id: uuidv4(),
-                taskTitle: 'todo 4',
-                taskBody: 'do stuff'
-            }
-        ],
+        boardTasks: [],
     },
     {
         boardName: 'done',
         color: 'success',
-        boardTasks: [
-            {
-                id: uuidv4(),
-                taskTitle: 'todo 5',
-                taskBody: 'do stuff'
-            }
-        ],
+        boardTasks: [],
     },
 ];
+
+const url = 'http://localhost:4000/';
 
 function App() {
 
     const [tasks, setTasks] = useState(tasksInitial);
+
+    const getTasks = () => {
+        // const url = 'http://localhost:4000/';
+        axios.get(url)
+            .then(function (response) {
+                const dbTasks = response.data.tasks;
+                console.log(dbTasks);
+                const tasksToDisplay = [...tasks];
+                tasksToDisplay.map(board => dbTasks.map(task =>
+                    board.boardName === task.status && board.boardTasks.push(task)
+                ));
+                setTasks(tasksToDisplay);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        getTasks();
+    }, []);
 
     const handleAddBoard = (board) => {
         const updatedBoardList = [...tasks];
@@ -73,35 +63,68 @@ function App() {
     }
 
     const handleAddTask = (newTask) => {
-        const updatedTodoTasks = tasks.find(board => board.boardName === 'todo');
-        const todoTasksIndex = tasks.findIndex(board => board.boardName === 'todo');
-
-        updatedTodoTasks.boardTasks.push({id: uuidv4(), ...newTask});
-
-        const newTaskList = [...tasks];
-        newTaskList.splice(todoTasksIndex, 1, {...updatedTodoTasks});
-
-        setTasks(newTaskList);
+        console.log(newTask);
+        axios.post(url, {
+            "taskTitle": newTask.taskTitle,
+            "taskBody": newTask.taskBody
+        })
+            .then(function (response) {
+                console.log(response);
+                getTasks();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        // const updatedTodoTasks = tasks.find(board => board.boardName === 'todo');
+        // const todoTasksIndex = tasks.findIndex(board => board.boardName === 'todo');
+        //
+        // updatedTodoTasks.boardTasks.push({id: uuidv4(), ...newTask});
+        //
+        // const newTaskList = [...tasks];
+        // newTaskList.splice(todoTasksIndex, 1, {...updatedTodoTasks});
+        //
+        // setTasks(newTaskList);
     }
 
     const handleTaskDelete = (args) => {
-        const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
-
-        const updatedTasks = [...tasks];
-        updatedTasks[boardIndex].boardTasks = updatedTasks[boardIndex].boardTasks.filter(el => el.id !== args.taskId);
-
-        setTasks(updatedTasks);
+        console.log(args);
+        axios.delete(`${url}${args.taskId}`)
+            .then(function (response) {
+                console.log(response);
+                getTasks();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        // const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
+        //
+        // const updatedTasks = [...tasks];
+        // updatedTasks[boardIndex].boardTasks = updatedTasks[boardIndex].boardTasks.filter(el => el._id !== args.taskId);
+        //
+        // setTasks(updatedTasks);
     }
 
     const handleEditTask = (args) => {
-        const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
-        const updatedTasks = [...tasks];
-        updatedTasks[boardIndex].boardTasks.map(task => console.log(task.id));
-        const taskIndex = updatedTasks[boardIndex].boardTasks.findIndex( task => task.id === args.editTask.id);
-        updatedTasks[boardIndex].boardTasks[taskIndex] = args.editTask;
-        console.log(updatedTasks[boardIndex].boardTasks.filter(task => task.id === args.editTask.id));
-
-        setTasks(updatedTasks);
+        console.log("args from handle edit task:" , args)
+        axios.patch(`${url}${args.editTask._id}`, {
+            "taskTitle": args.editTask.taskTitle,
+            "taskBody": args.editTask.taskBody
+        })
+            .then(function (response) {
+                console.log(response);
+                getTasks();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        // const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
+        // const updatedTasks = [...tasks];
+        // updatedTasks[boardIndex].boardTasks.map(task => console.log(task._id));
+        // const taskIndex = updatedTasks[boardIndex].boardTasks.findIndex( task => task._id === args.editTask._id);
+        // updatedTasks[boardIndex].boardTasks[taskIndex] = args.editTask;
+        // console.log(updatedTasks[boardIndex].boardTasks.filter(task => task._id === args.editTask._id));
+        //
+        // setTasks(updatedTasks);
     }
 
     const handleHorizontalTaskMove = (args) => {

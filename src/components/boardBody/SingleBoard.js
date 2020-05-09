@@ -15,7 +15,7 @@ function SingleBoard ({board, handleHorizontalTaskMove, handleVerticalTaskMove, 
                         task={task}
                         taskTitle={task.taskTitle}
                         boardName={board.boardName}
-                        taskId={task.id}
+                        taskId={task._id}
                         handleHorizontalTaskMove={(args) => handleHorizontalTaskMove(args)}
                         handleVerticalTaskMove={(args) => handleVerticalTaskMove(args)}
                         handleTaskDelete={(args) => handleTaskDelete(args)}

@@ -7,13 +7,18 @@ function EditTaskForm ({className, task, handleEditTask}) {
     const [editTask, setEditTask] = useState(task);
 
     const toggleModal = () => {
+        console.log("task that came thu props: ", task)
+        console.log("task in editTask state: ", editTask)
         setEditTaskModal(!editTaskModal);
-        setEditTask({});
+        // setEditTask({});
     }
 
     const onTaskChange = (ev) => {
         const {name, value} = ev.target;
-        setEditTask({...editTask, [name]: value, id: task.id});
+        console.log("edit task form ", editTask, name, value);
+        const unEditedTask = {...editTask}
+        console.log(unEditedTask);
+        setEditTask({...unEditedTask, [name]: value});
     }
 
     const onEditTaskButtonClick = () => {
