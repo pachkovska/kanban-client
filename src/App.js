@@ -35,16 +35,13 @@ function App() {
     const [tasks, setTasks] = useState(tasksInitial);
 
     const getTasks = () => {
-        // const url = 'http://localhost:4000/';
         axios.get(url)
             .then(function (response) {
                 const dbTasks = response.data.tasks;
                 console.log(dbTasks);
                 const tasksToDisplay = [...tasks];
                 tasksToDisplay.map(board => {
-                    let singleBoardTasks = dbTasks.filter(task => task.status === board.boardName);
-                    console.log(singleBoardTasks);
-                    board.boardTasks = singleBoardTasks;
+                    board.boardTasks = dbTasks.filter(task => task.status === board.boardName);
                     }
                 );
                 setTasks(tasksToDisplay);
@@ -77,15 +74,6 @@ function App() {
             .catch(function (error) {
                 console.log(error);
             });
-        // const updatedTodoTasks = tasks.find(board => board.boardName === 'todo');
-        // const todoTasksIndex = tasks.findIndex(board => board.boardName === 'todo');
-        //
-        // updatedTodoTasks.boardTasks.push({id: uuidv4(), ...newTask});
-        //
-        // const newTaskList = [...tasks];
-        // newTaskList.splice(todoTasksIndex, 1, {...updatedTodoTasks});
-        //
-        // setTasks(newTaskList);
     }
 
     const handleTaskDelete = (args) => {
@@ -98,19 +86,14 @@ function App() {
             .catch(function (error) {
                 console.log(error);
             });
-        // const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
-        //
-        // const updatedTasks = [...tasks];
-        // updatedTasks[boardIndex].boardTasks = updatedTasks[boardIndex].boardTasks.filter(el => el._id !== args.taskId);
-        //
-        // setTasks(updatedTasks);
     }
 
     const handleEditTask = (args) => {
         console.log("args from handle edit task:" , args)
         axios.patch(`${url}${args.editTask._id}`, {
             "taskTitle": args.editTask.taskTitle,
-            "taskBody": args.editTask.taskBody
+            "taskBody": args.editTask.taskBody,
+            "status": args.editTask.status
         })
             .then(function (response) {
                 console.log(response);
@@ -119,14 +102,6 @@ function App() {
             .catch(function (error) {
                 console.log(error);
             });
-        // const boardIndex = tasks.findIndex(board => board.boardName === args.boardName);
-        // const updatedTasks = [...tasks];
-        // updatedTasks[boardIndex].boardTasks.map(task => console.log(task._id));
-        // const taskIndex = updatedTasks[boardIndex].boardTasks.findIndex( task => task._id === args.editTask._id);
-        // updatedTasks[boardIndex].boardTasks[taskIndex] = args.editTask;
-        // console.log(updatedTasks[boardIndex].boardTasks.filter(task => task._id === args.editTask._id));
-        //
-        // setTasks(updatedTasks);
     }
 
     const handleHorizontalTaskMove = (args) => {
